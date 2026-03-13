@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👨‍🔧 Grupo Tecnicos do Brasil 🇧🇷</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #1565c0; 
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2.5em; 
+            text-transform: uppercase;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            max-width: 1450px; 
+            width: 100%;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        #mapa {
+            width: 900px; 
+            height: 650px;
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+        .painel {
+            width: 420px;
+            background-color: white;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            min-height: 250px;
+            max-height: 650px;
+            overflow-y: auto;
+        }
+        .painel h2 {
+            margin-top: 0;
+            color: #0056b3;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            font-size: 1.5em;
+        }
+        .info {
+            font-size: 1.05em; 
+            margin: 8px 0;
+            color: #444;
+            line-height: 1.5;
+        }
+        .tecnico-card {
+            background-color: #f9f9fc;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .instrucao {
+            color: #888;
+            font-style: italic;
+            text-align: center;
+            margin-top: 40px;
+            font-size: 1.1em;
+        }
+        .sem-tecnico {
+            color: #d9534f;
+            font-style: italic;
+        }
+        .painel::-webkit-scrollbar { width: 8px; }
+        .painel::-webkit-scrollbar-track { background: #f1f1f1; }
+        .painel::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+        
+        /* Estilo para o link do WhatsApp */
+        .link-zap {
+            color: #25D366; 
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .link-zap:hover {
+            text-decoration: underline;
+            color: #128C7E;
+        }
+    </style>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+
+    <h1>👨‍🔧 Grupo Tecnicos do Brasil 🇧🇷</h1>
+
+    <div class="container">
+        <div id="mapa"></div>
+
+        <div class="painel">
+            <h2>Dados do Atendimento</h2>
+            <div id="conteudo-painel">
+                <p class="instrucao">👈 Clique em um estado azul no mapa para ver o(s) técnico(s) responsável(eis).</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        // -------------------------------------------------------------
+        // DADOS DOS TÉCNICOS COM TELEFONE
+        // -------------------------------------------------------------
+        
+        const tecDhanillo = {
+            nome: 'Dhanillo', empresa: 'Rei dos Elevadores', cidade: 'Goiânia – GO',
+            telefone: '+55 62 8247-1007', 
+            atuacao: 'Manutenção de equipamentos em geral, foco em elevadores.'
+        };
+        const tecAngelo = {
+            nome: 'Ângelo Marcelo', empresa: 'Elevamis soluções', cidade: 'Fortaleza - CE',
+            telefone: '+55 85 8884-5073',
+            atuacao: 'Manutenção de equipamentos em geral, foco em elevadores.'
+        };
+        const tecDiego = {
+            nome: 'Diego', empresa: 'CL manutenção de equipamentos automotivo', cidade: 'Curitiba - PR',
+            telefone: '+55 41 9860-3310',
+            atuacao: 'Manutenção de equipamentos em geral, foco em elevadores e compressor.'
+        };
+        const tecCarlos = {
+            nome: 'Carlos hack', empresa: 'Hack manutenções em elevadores', cidade: 'Rio do Sul - SC',
+            telefone: '+55 47 8850-2859',
+            atuacao: 'Manutenção de equipamentos em geral, trabalhamos com montagem de equipamentos novos também !'
+        };
+        const tecJunim = {
+            nome: 'Junim Equipamentos', empresa: 'Junim Equipamentos', cidade: 'Palmas - TO',
+            telefone: '+55 63 9234-9385',
+            atuacao: 'Venda de equipamentos Novos e usados, Manutenção e suporte Tecnico'
+        };
+
+        const tecnicos = {
+            'BR-GO': [tecDhanillo], 'BR-MT': [tecDhanillo],
+            'BR-CE': [tecAngelo], 'BR-PI': [tecAngelo], 'BR-RN': [tecAngelo],
+            'BR-PR': [tecDiego, tecCarlos], 'BR-SC': [tecDiego, tecCarlos],
+            'BR-RS': [tecCarlos], 'BR-SP': [tecCarlos],
+            'BR-TO': [tecJunim], 'BR-PA': [tecJunim], 'BR-MA': [tecJunim]
+        };
+
+        const nomesEstados = {
+            'BR-AC': 'Acre', 'BR-AL': 'Alagoas', 'BR-AP': 'Amapá', 'BR-AM': 'Amazonas',
+            'BR-BA': 'Bahia', 'BR-CE': 'Ceará', 'BR-DF': 'Distrito Federal', 'BR-ES': 'Espírito Santo',
+            'BR-GO': 'Goiás', 'BR-MA': 'Maranhão', 'BR-MT': 'Mato Grosso', 'BR-MS': 'Mato Grosso do Sul',
+            'BR-MG': 'Minas Gerais', 'BR-PA': 'Pará', 'BR-PB': 'Paraíba', 'BR-PR': 'Paraná',
+            'BR-PE': 'Pernambuco', 'BR-PI': 'Piauí', 'BR-RJ': 'Rio de Janeiro', 'BR-RN': 'Rio Grande do Norte',
+            'BR-RS': 'Rio Grande do Sul', 'BR-RO': 'Rondônia', 'BR-RR': 'Roraima', 'BR-SC': 'Santa Catarina',
+            'BR-SP': 'São Paulo', 'BR-SE': 'Sergipe', 'BR-TO': 'Tocantins'
+        };
+
+        google.charts.load('current', { 'packages':['geochart'] });
+        google.charts.setOnLoadCallback(desenharMapa);
+
+        function desenharMapa() {
+            var mapData = [
+                ['Estado', 'Cobertura', {type: 'string', role: 'tooltip'}]
+            ];
+
+            for (var codigo in nomesEstados) {
+                var nome = nomesEstados[codigo];
+                var qtd = tecnicos[codigo] ? tecnicos[codigo].length : 0;
+                var textoTooltip = nome;
+                
+                if (qtd > 0) {
+                    textoTooltip += ' (' + qtd + ' técnico' + (qtd > 1 ? 's' : '') + ')';
+                } else {
+                    textoTooltip += ' (Sem cobertura)';
+                }
+
+                var temTecnico = qtd > 0 ? 1 : 0;
+
+                mapData.push([ {v: codigo, f: nome}, temTecnico, textoTooltip ]);
+            }
+
+            var data = google.visualization.arrayToDataTable(mapData);
+
+            var options = {
+                region: 'BR', 
+                displayMode: 'regions',
+                resolution: 'provinces', 
+                colorAxis: {
+                    colors: ['#e0e0e0', '#1565c0'], 
+                    minValue: 0, 
+                    maxValue: 1
+                },
+                backgroundColor: '#ffffff', // Fundo branco
+                datalessRegionColor: '#ffffff', // <-- A MÁGICA: Pinta os países vizinhos de branco!
+                defaultColor: '#f5f5f5',
+                legend: 'none' 
+            };
+
+            var chart = new google.visualization.GeoChart(document.getElementById('mapa'));
+
+            google.visualization.events.addListener(chart, 'select', function() {
+                var selection = chart.getSelection();
+                if (selection.length > 0) {
+                    var codigoEstado = data.getValue(selection[0].row, 0); 
+                    var nomeDoEstado = nomesEstados[codigoEstado];
+                    var listaTecnicos = tecnicos[codigoEstado];
+                    
+                    var htmlConteudo = `<h3 style="color: #333; margin-top: 0; margin-bottom: 15px;">📍 Estado: ${nomeDoEstado}</h3>`;
+
+                    if (listaTecnicos && listaTecnicos.length > 0) {
+                        listaTecnicos.forEach(function(tec) {
+                            
+                            var numeroLimpo = tec.telefone.replace(/\D/g, ''); 
+                            if(numeroLimpo !== '' && !numeroLimpo.startsWith('55')) {
+                                numeroLimpo = '55' + numeroLimpo; 
+                            }
+                            var linkWhatsapp = `https://wa.me/${numeroLimpo}`;
+
+                            htmlConteudo += `
+                            <div class="tecnico-card">
+                                <p class="info"><strong>👨‍🔧 Nome:</strong> ${tec.nome}</p>
+                                <p class="info"><strong>🏢 Empresa:</strong> ${tec.empresa}</p>
+                                <p class="info"><strong>📍 Base:</strong> ${tec.cidade}</p>
+                                <p class="info"><strong>📞 Contato:</strong> <a href="${linkWhatsapp}" target="_blank" class="link-zap">${tec.telefone}</a></p>
+                                <p class="info"><strong>🔧 Atuação:</strong> ${tec.atuacao}</p>
+                            </div>
+                            `;
+                        });
+                    } else {
+                        htmlConteudo += `<p class="info sem-tecnico">Ainda não há técnico cadastrado para esta região.</p>`;
+                    }
+
+                    document.getElementById('conteudo-painel').innerHTML = htmlConteudo;
+                }
+            });
+
+            chart.draw(data, options);
+        }
+    </script>
+</body>
+</html>
